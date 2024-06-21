@@ -13,14 +13,14 @@ class SeasonEnum(enum.Enum):
     WINTER = 'Winter'
 
 status = Table("status", meta_data,
-                Column("id", Integer, primary_key=True),
+                Column("id", Integer, primary_key=True, autoincrement=False),
                 Column("name", String(100), nullable=False, unique=True),
                 Column("created_at", DateTime, default=datetime.datetime.utcnow),
                 Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
             )
 
 animes = Table("animes", meta_data,
-                Column("id", Integer, primary_key=True),
+                Column("id", Integer, primary_key=True, autoincrement=False),
                 Column("name", String(250),nullable=False),
                 Column("description", Text, nullable=False),
                 Column("synopsis", Text, nullable=False),
@@ -35,7 +35,7 @@ animes = Table("animes", meta_data,
             )
 
 genders = Table("genders", meta_data,
-                Column("id", Integer, primary_key=True),
+                Column("id", Integer, primary_key=True, autoincrement=False),
                 Column("name", String(100), nullable=False, unique=True),
                 Column("created_at", DateTime, default=datetime.datetime.utcnow),
                 Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
