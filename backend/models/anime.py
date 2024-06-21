@@ -12,13 +12,6 @@ class SeasonEnum(enum.Enum):
     AUTUMN = 'Autumn'
     WINTER = 'Winter'
 
-status = Table("status", meta_data,
-                Column("id", Integer, primary_key=True, autoincrement=False),
-                Column("name", String(100), nullable=False, unique=True),
-                Column("created_at", DateTime, default=datetime.datetime.utcnow),
-                Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
-            )
-
 animes = Table("animes", meta_data,
                 Column("id", Integer, primary_key=True, autoincrement=False),
                 Column("name", String(250),nullable=False),
@@ -29,7 +22,7 @@ animes = Table("animes", meta_data,
                 Column("start_aired", DateTime, nullable=False),
                 Column("end_aired", DateTime, nullable=False),
                 Column("premiered", Enum(SeasonEnum), nullable=False),
-                Column("status_id", ForeignKey("status.id")),
+                Column("status", String(50), nullable=False),
                 Column("created_at", DateTime, default=datetime.datetime.utcnow),
                 Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
             )

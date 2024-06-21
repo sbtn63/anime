@@ -19,6 +19,6 @@ favorite_list_animes = Table("favorite_list_animes", meta_data,
                 Column("id", Integer, primary_key=True),
                 Column("created_at", DateTime, default=datetime.datetime.utcnow),
                 Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
-                Column("user_id", ForeignKey('users.id')),
+                Column("favorite_list_id", ForeignKey('favorite_lists.id')),
                 Column("anime_id", ForeignKey('animes.id')),
             )
