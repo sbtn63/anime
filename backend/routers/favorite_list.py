@@ -70,6 +70,6 @@ async def delete_favorite_list(id : int, current_user : UserSchema = Depends(get
 async def add_anime_favorite_list(add_anime_favorite_data : FavoriteListAnimeAddSchema, current_user : UserSchema = Depends(get_current_user)):
     return {"message" : "API"}
 
-@favorite_list.delete('/anime/{id}')
+@favorite_list.delete('/{favorite_list_id}/anime/{anime_id}')
 async def delete_anime_favorite_list():
     return {"message" : "API"}
