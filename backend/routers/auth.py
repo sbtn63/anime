@@ -33,7 +33,6 @@ async def register_user(register_data : UserRegisterSchema):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email exists")
             
         username_exists = get_user_email_or_username(username=register_data.username)
-            
         if(not username_exists is None):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username exists")
         
