@@ -23,9 +23,3 @@ class UserLoginSchema(BaseModel):
 class UserRegisterSchema(UserLoginSchema):
     username : str
     password_confirmation: str
-    created_at: datetime = datetime.utcnow()
-
-    class Config:
-        json_encoders = {
-            datetime: lambda v: v.strftime("%Y-%m-%d %H:%M:%S") if v else None
-        }
