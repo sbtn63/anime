@@ -23,3 +23,7 @@ class UserLoginSchema(BaseModel):
 class UserRegisterSchema(UserLoginSchema):
     username : str
     password_confirmation: str
+
+class UserRatedAnimeShema(BaseModel):
+    anime_id : int
+    rating : int

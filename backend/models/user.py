@@ -17,6 +17,7 @@ users = Table("users", meta_data,
 
 user_rated_animes = Table("user_reated_animes", meta_data,
                 Column("id", Integer, primary_key=True),
+                Column("rating", Integer, nullable=False),
                 Column("created_at", DateTime, default=datetime.datetime.utcnow),
                 Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
                 Column("user_id", ForeignKey('users.id')),
