@@ -1,14 +1,15 @@
 import httpx
-from fastapi import APIRouter, status, HTTPException, Depends
 from typing import List
-from config.db import engine
-from schemas.favorite_list import FavoriteListSchema, FavoriteListAddSchema, FavoriteListUpdateSchema, FavoriteListAnimeAddSchema
-from schemas.user import UserSchema
-from auth.dependencies import get_current_user
-from models.favorite_list import favorite_lists, favorite_list_animes
-from models.anime import animes, anime_genders, genders
-from config.settings import BASE_URL_KITSU_API
 from datetime import datetime
+from fastapi import APIRouter, status, HTTPException, Depends
+
+from config.db import engine
+from config.settings import BASE_URL_KITSU_API
+from auth.dependencies import get_current_user
+from models.anime import animes, anime_genders, genders
+from models.favorite_list import favorite_lists, favorite_list_animes
+from schemas.user import UserSchema
+from schemas.favorite_list import FavoriteListSchema, FavoriteListAddSchema, FavoriteListUpdateSchema, FavoriteListAnimeAddSchema
 
 favorite_list = APIRouter()
 url = f'{BASE_URL_KITSU_API}/anime'

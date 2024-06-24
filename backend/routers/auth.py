@@ -47,4 +47,4 @@ async def register_user(register_data : UserRegisterSchema):
             
         access_token, access_token_expires = create_access_token(user.username)
             
-        return {"access_token": access_token, "token_type": "Bearer", "expire" : access_token_expires}
+    return {"access_token": access_token, "token_type": "Bearer", "expire" : access_token_expires}

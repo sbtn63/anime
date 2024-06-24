@@ -16,16 +16,13 @@ url = f'{BASE_URL_KITSU_API}/genres?page[limit]=70&page[offset]=0'
 async def list_genders():
     with engine.connect() as conn:
         result = conn.execute(genders.select()).fetchall()
-        return result
+    return result
 
 @gender.post("/", status_code=status.HTTP_201_CREATED)
 async def create_genders():
     headers = {
         "Content-Type": "application/json",
     }
-    
-    gender_data = GenderSchema()
-    gender_data = {name: content for name, content in gender_data}
     
     try:
         async with httpx.AsyncClient() as client:
@@ -43,8 +40,7 @@ async def create_genders():
                 if gender_exists.first() is not None:
                     continue
                 
-                gender_data['id'] =  item['id']
-                gender_data['name'] = item['attributes']['name']                                         
+                gender_data = {"id" : item['id'], "name" : item['attributes']['name'] }                                       
 
                 conn.execute(genders.insert().values(gender_data))
                 insert_count += 1
