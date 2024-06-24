@@ -1,16 +1,9 @@
 from sqlalchemy import Table, Column
 from sqlalchemy.sql.sqltypes import Integer, String, DateTime, Text
 from sqlalchemy import ForeignKey
-import enum
-from sqlalchemy import Enum
 from config.db import meta_data
 import datetime
 
-class SeasonEnum(enum.Enum):
-    SPRING = 'Spring'
-    SUMMER = 'Summer'
-    AUTUMN = 'Autumn'
-    WINTER = 'Winter'
 
 animes = Table("animes", meta_data,
                 Column("id", Integer, primary_key=True, autoincrement=False),
@@ -19,9 +12,8 @@ animes = Table("animes", meta_data,
                 Column("synopsis", Text, nullable=False),
                 Column("image_url", String(255), nullable=False),
                 Column("episodes", Integer, nullable=True),
-                Column("start_aired", DateTime, nullable=False),
-                Column("end_aired", DateTime, nullable=False),
-                Column("premiered", Enum(SeasonEnum), nullable=False),
+                Column("start_date", DateTime, nullable=True),
+                Column("end_date", DateTime, nullable=True),
                 Column("status", String(50), nullable=False),
                 Column("created_at", DateTime, default=datetime.datetime.utcnow),
                 Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
