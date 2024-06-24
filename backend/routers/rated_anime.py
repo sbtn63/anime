@@ -18,8 +18,6 @@ async def user_rated_anime(rated_data : UserRatedAnimeShema, current_user : User
         
         anime_rated = conn.execute(user_rated_animes.select().where(user_rated_animes.c.anime_id == rated_data.anime_id).where(user_rated_animes.c.user_id == current_user.id)).first()
         
-        print(anime_rated)
-        
         if not anime_rated is None:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Anime rated!")
         
