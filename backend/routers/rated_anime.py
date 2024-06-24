@@ -45,4 +45,4 @@ async def user_rated_anime(rated_data : UserRatedAnimeShema, current_user : User
         conn.execute(user_rated_animes.insert().values(rated_data))
         conn.commit()
         
-    return {"message" : "Rated Add"}
+    return {"message" : "Rated Anime Add"}
