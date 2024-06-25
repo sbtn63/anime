@@ -1,16 +1,23 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from typing import List
 from config.db import engine
-from sqlalchemy import select, join, and_, exists
+from sqlalchemy import select, join
 from auth.dependencies import get_current_user
-from schemas.user import UserSchema, UserRatedAnimeSchema, UserRatedAnimeUpdateSchema
+from schemas.user import UserSchema, UserRatedAnimeSchema, UserRatedAnimeAddSchema, UserRatedAnimeUpdateSchema
 from models.anime import animes
 from models.favorite_list import favorite_list_animes, favorite_lists
 from models.user import users, user_rated_animes
 
 rated_anime = APIRouter()
 
+@rated_anime.get('/', response_model=List[UserRatedAnimeSchema], status_code=status.HTTP_200_OK)
+async def list_rated_animes_user(current_user : UserSchema = Depends(get_current_user)):
+    with engine.connect() as conn:
+        result = conn.execute(user_rated_animes.select().where(user_rated_animes.c.user_id == current_user.id)).fetchall()
+    return result
+
 @rated_anime.post('/')
-async def user_rated_anime(rated_data : UserRatedAnimeSchema, current_user : UserSchema = Depends(get_current_user)):
+async def user_rated_anime(rated_data : UserRatedAnimeAddSchema , current_user : UserSchema = Depends(get_current_user)):
     with engine.connect() as conn:
         anime = conn.execute(animes.select().where(animes.c.id == rated_data.anime_id)).first()
         if anime is None:
@@ -69,7 +76,7 @@ async def update_rating_anime(id : int , data_rating : UserRatedAnimeUpdateSchem
 
 
 @rated_anime.delete('/{id}', status_code=status.HTTP_200_OK)
-async def update_rating_anime(id : int , current_user : UserSchema = Depends(get_current_user)):
+async def delete_rated_anime(id : int , current_user : UserSchema = Depends(get_current_user)):
     with engine.connect() as conn:
         anime = conn.execute(animes.select().where(animes.c.id == id)).first()
         if anime is None:
