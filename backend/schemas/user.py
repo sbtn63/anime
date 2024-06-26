@@ -18,7 +18,7 @@ class UserSchema(BaseModel):
 
 class UserUpdateSchema(BaseModel):
     username: Optional[str] =None
-    email: Optional[str] = None
+    email: Optional[EmailStr] = None
     biography: Optional[str] = None
     avatar_url: Optional[str] = None
 
@@ -48,5 +48,4 @@ class UserRatedAnimeAddSchema(BaseModel):
     rating : int
 
 class UserRatedAnimeUpdateSchema(BaseModel):
-    anime_id : int
     rating : int

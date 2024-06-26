@@ -9,7 +9,7 @@ class FavoriteListSchema(BaseModel):
     name : str
     description : Optional[str] = None
     cover_url : Optional[str] = None
-    created_at : datetime = datetime.utcnow()
+    created_at : Optional[datetime] = None
     updated_at : Optional[datetime] = None
     user_id : int
 
@@ -22,6 +22,12 @@ class FavoriteListAddSchema(BaseModel):
     name : str
     description : Optional[str] = None
     cover_url : Optional[str] = None
+
+class FavoriteListAnimeSchema(BaseModel):
+    favorite_list_id : int
+    anime_id : int
+    created_at : Optional[datetime] = None
+    updated_at : Optional[datetime] = None
     
 class FavoriteListAnimeAddSchema(BaseModel):
     favorite_list_id : int

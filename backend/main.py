@@ -10,11 +10,11 @@ meta_data.create_all(engine, tables=[users, animes, genders, anime_genders, favo
 
 app = FastAPI()
 
-app.include_router(auth.auth, prefix='/api/auth', tags=['auth'])
-app.include_router(user.user, prefix='/api/user', tags=['user'])
+app.include_router(auth.auth, prefix='/api/auth', tags=['Auth'])
+app.include_router(user.user, prefix='/api/user', tags=['User'])
+app.include_router(rated_anime.rated_anime, prefix='/api/rated-anime', tags=['Rated anime'])
 app.include_router(favorite_list.favorite_list, prefix='/api/favorite-list', tags=['Favorite List'])
-app.include_router(gender.gender, prefix='/api/gender', tags=['gender'])
-app.include_router(rated_anime.rated_anime, prefix='/api/rated-anime', tags=['rated anime'])
+app.include_router(gender.gender, prefix='/api/gender', tags=['Gender'])
 
 @app.get('/')
 def hello():
