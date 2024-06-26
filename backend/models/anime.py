@@ -1,8 +1,9 @@
 from sqlalchemy import Table, Column
 from sqlalchemy.sql.sqltypes import Integer, String, DateTime, Text
 from sqlalchemy import ForeignKey
-from config.db import meta_data
 import datetime
+
+from db.config import meta_data
 
 
 animes = Table("animes", meta_data,

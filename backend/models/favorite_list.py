@@ -2,8 +2,9 @@ from sqlalchemy import Table, Column
 from sqlalchemy.sql.sqltypes import Integer, String, DateTime, Text
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
-from config.db import meta_data
 import datetime
+
+from db.config import meta_data
 
 favorite_lists = Table("favorite_lists", meta_data,
                 Column("id", Integer, primary_key=True),

@@ -2,14 +2,14 @@ from fastapi import APIRouter, HTTPException, status
 from typing import List
 import httpx
 
-from config.db import engine
-from config.settings import BASE_URL_KITSU_API
+from config import settings
+from db.config import engine
 from models.anime import genders
 from schemas.gender import GenderSchema
 
 gender = APIRouter()
 
-url = f'{BASE_URL_KITSU_API}/genres?page[limit]=70&page[offset]=0'
+url = f'{settings.base_url_kitsu_api}/genres?page[limit]=70&page[offset]=0'
 
 @gender.get('/', response_model=List[GenderSchema], status_code=status.HTTP_200_OK)
 async def list_genders():

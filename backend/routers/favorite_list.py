@@ -3,8 +3,8 @@ from typing import List
 from datetime import datetime
 import httpx
 
-from config.db import engine
-from config.settings import BASE_URL_KITSU_API
+from config import settings
+from db.config import engine
 from auth.dependencies import get_current_user
 from models.anime import animes, anime_genders, genders
 from models.favorite_list import favorite_lists, favorite_list_animes
@@ -12,7 +12,7 @@ from schemas.user import UserSchema
 from schemas.favorite_list import FavoriteListSchema, FavoriteListAddSchema, FavoriteListUpdateSchema, FavoriteListAnimeSchema, FavoriteListAnimeAddSchema
 
 favorite_list = APIRouter()
-url = f'{BASE_URL_KITSU_API}/anime'
+url = f'{settings.base_url_kitsu_api}/anime'
 
 def get_favorite_list(favorite_list_id : int, user_id : int):
     with engine.connect() as conn:

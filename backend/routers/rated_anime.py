@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 from sqlalchemy import select, join
 
-from config.db import engine
+from db.config import engine
 from auth.dependencies import get_current_user
 from models.anime import animes
 from models.favorite_list import favorite_list_animes, favorite_lists

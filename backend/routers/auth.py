@@ -2,7 +2,7 @@ from fastapi import APIRouter, status, HTTPException, Depends
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
 
-from config.db import engine
+from db.config import engine
 from auth.dependencies import get_user_email_or_username
 from utils.token import create_access_token
 from models.user import users

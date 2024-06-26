@@ -1,8 +1,8 @@
 from fastapi import status, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import or_
 
-from config.db import engine
-from fastapi.security import OAuth2PasswordBearer
+from db.config import engine
 from utils.token import verify_token
 from models.user import users
 
@@ -20,7 +20,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         username = verify_token(token, credentials_exception)
         user = get_user_email_or_username(username=username)
         if user is None:
-            raise HTTPException(status_code=404, detail="User no exists")
+            raise HTTPException(status_code=404, detail="User no exists!")
         return user
 
 def get_user_email_or_username(email:str = None, username:str = None):
@@ -28,5 +28,9 @@ def get_user_email_or_username(email:str = None, username:str = None):
         return None
     
     with engine.connect() as conn:
-        user = conn.execute(users.select().where(or_(users.c.email == email, users.c.username == username))).first()
-        return user
+        user = conn.execute(
+            users.select()
+            .where(or_(users.c.email == email, users.c.username == username))
+        ).first()
+        
+    return user
