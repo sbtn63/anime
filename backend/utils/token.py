@@ -17,11 +17,11 @@ def create_access_token(username):
 def verify_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, settings.secret_key_jwt, algorithms=[settings.algorithm])
-        email: str = payload.get("sub")
+        username: str = payload.get("sub")
         if email is None:
             raise credentials_exception
     except jwt.ExpiredSignatureError:
         raise credentials_exception
     except jwt.InvalidTokenError:
         raise credentials_exception
-    return email
+    return username
