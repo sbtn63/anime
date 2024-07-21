@@ -1,6 +1,5 @@
 import jwt
 from datetime import datetime, timedelta
-from jwt.exceptions import InvalidTokenError
 from config import settings
 
 def create_access_token(username):
@@ -18,7 +17,7 @@ def verify_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, settings.secret_key_jwt, algorithms=[settings.algorithm])
         username: str = payload.get("sub")
-        if email is None:
+        if username is None:
             raise credentials_exception
     except jwt.ExpiredSignatureError:
         raise credentials_exception

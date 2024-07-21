@@ -140,3 +140,5 @@ cython_debug/
 migrations/
 
 database.db
+
+alembic.ini

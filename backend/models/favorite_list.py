@@ -1,25 +1,30 @@
-from sqlalchemy import Table, Column
-from sqlalchemy.sql.sqltypes import Integer, String, DateTime, Text
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship
 import datetime
+from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey
+from sqlalchemy.orm import relationship
+from db.config import Base
 
-from db.config import meta_data
+class FavoriteList(Base):
+    __tablename__ = "favorite_lists"
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+    description = Column(Text, nullable=True)
+    cover_url = Column(String(255), nullable=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+    
+    user = relationship("User", back_populates="favorite_lists")
+    animes = relationship("FavoriteListAnime", back_populates="favorite_list")
 
-favorite_lists = Table("favorite_lists", meta_data,
-                Column("id", Integer, primary_key=True),
-                Column("name", String(50), nullable=False),
-                Column("description", Text, nullable=True),
-                Column("cover_url", String(255), nullable=True),
-                Column("created_at", DateTime, default=datetime.datetime.utcnow),
-                Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
-                Column("user_id", ForeignKey('users.id')),
-            )
-
-favorite_list_animes = Table("favorite_list_animes", meta_data,
-                Column("id", Integer, primary_key=True),
-                Column("created_at", DateTime, default=datetime.datetime.utcnow),
-                Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
-                Column("favorite_list_id", ForeignKey('favorite_lists.id')),
-                Column("anime_id", ForeignKey('animes.id')),
-            )
+class FavoriteListAnime(Base):
+    __tablename__ = "favorite_list_animes"
+    
+    id = Column(Integer, primary_key=True)
+    favorite_list_id = Column(Integer, ForeignKey("favorite_lists.id"))
+    anime_id = Column(Integer, ForeignKey("animes.id"))
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+    
+    favorite_list = relationship("FavoriteList", back_populates="animes")
+    anime = relationship("Anime", back_populates="favorite_lists")

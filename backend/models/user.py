@@ -1,26 +1,32 @@
-from sqlalchemy import Table, Column
-from sqlalchemy.sql.sqltypes import Integer, String, DateTime, Text
-from sqlalchemy import ForeignKey
 import datetime
+from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey
+from sqlalchemy.orm import relationship
+from db.config import Base
 
-from db.config import meta_data
+class User(Base):
+    __tablename__ = "users"
+    
+    id = Column("id", Integer, primary_key=True, index=True)
+    username = Column(String(50), nullable=False, unique=True)
+    email = Column(String(255), nullable=False, unique=True)
+    password = Column(String(255), nullable=False)
+    avatar_url = Column(String(255), nullable=True)
+    biography = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
 
-users = Table("users", meta_data,
-                Column("id", Integer, primary_key=True),
-                Column("username", String(50), nullable=False, unique=True),
-                Column("email", String(255), nullable=False, unique=True),
-                Column("password", String(255), nullable=False),
-                Column("avatar_url", String(255), nullable=True),
-                Column("biography", Text, nullable=True),
-                Column("created_at", DateTime, default=datetime.datetime.utcnow),
-                Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
-            )
+    favorite_lists = relationship("FavoriteList", back_populates="user")
+    rated_animes = relationship("UserRatedAnime", back_populates="user")
 
-user_rated_animes = Table("user_reated_animes", meta_data,
-                Column("id", Integer, primary_key=True),
-                Column("rating", Integer, nullable=False),
-                Column("created_at", DateTime, default=datetime.datetime.utcnow),
-                Column("updated_at", DateTime, onupdate=datetime.datetime.utcnow),
-                Column("user_id", ForeignKey('users.id')),
-                Column("anime_id", ForeignKey('animes.id')),
-            )
+class UserRatedAnime(Base):
+    __tablename__ = "user_rated_animes"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    rating = Column(Integer, nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    anime_id = Column(Integer, ForeignKey('animes.id'))
+    
+    user = relationship("User", back_populates="rated_animes")
+    anime = relationship("Anime", back_populates="rated_users")

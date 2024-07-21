@@ -1,11 +1,9 @@
 from fastapi import APIRouter, status, Depends, HTTPException
 from werkzeug.security import generate_password_hash, check_password_hash
-from typing import List
 
-from db.config import engine
+from db.config import SessionLocal, update_model
 from auth.dependencies import get_current_user, get_user_email_or_username
 from utils.token import create_access_token
-from models.user import users
 from schemas.user import UserSchema, UserUpdateSchema, UserUpdatePasswordSchema
 
 user = APIRouter()
@@ -16,7 +14,7 @@ async def profile(current_user : UserSchema = Depends(get_current_user)):
 
 @user.put('/', status_code=status.HTTP_200_OK)
 async def update_user(user_data : UserUpdateSchema, current_user : UserSchema = Depends(get_current_user)):
-    with engine.connect() as conn:
+    with SessionLocal() as db:
         access_token = None
         
         if not user_data.email is None:
@@ -31,8 +29,11 @@ async def update_user(user_data : UserUpdateSchema, current_user : UserSchema = 
             access_token, access_token_expires = create_access_token(user_data.username)
         
         user_data = user_data.dict(exclude_unset=True)
-        conn.execute(users.update().where(users.c.id == current_user.id).values(user_data))
-        conn.commit()
+        
+        current_user = update_model(instance=current_user, data=user_data)
+        
+        db.add(current_user)
+        db.commit()
         
     if not access_token is None:
         return {"message" : "User Updated!", "access_token": access_token, "token_type": "Bearer", "expire" : access_token_expires}
@@ -41,7 +42,7 @@ async def update_user(user_data : UserUpdateSchema, current_user : UserSchema = 
 
 @user.patch('/password', status_code=status.HTTP_200_OK)
 async def update_password(data_update_password : UserUpdatePasswordSchema, current_user : UserSchema = Depends(get_current_user)):
-    with engine.connect() as conn:
+    with SessionLocal() as db:
         
         if data_update_password.confirm_new_password != data_update_password.new_password:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Passwords not match!")
@@ -52,11 +53,9 @@ async def update_password(data_update_password : UserUpdatePasswordSchema, curre
         
         data_update_password.new_password = generate_password_hash(data_update_password.new_password, "pbkdf2:sha256:30", 30)
         
-        conn.execute(users.update()
-                .where(users.c.id == current_user.id)
-                .values({"password" : data_update_password.new_password})
-        )
-        conn.commit()
+        current_user.password = data_update_password.new_password
+        db.add(current_user)
+        db.commit()
     
     return {"message" : "Password updated!"}
 

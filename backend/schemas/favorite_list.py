@@ -2,8 +2,6 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-from schemas.user import UserSchema
-
 class FavoriteListSchema(BaseModel):
     id : int = None
     name : str
