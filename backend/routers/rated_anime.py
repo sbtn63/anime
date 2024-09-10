@@ -25,14 +25,14 @@ async def list_rated_animes_user(current_user : UserSchema = Depends(get_current
         result = db.query(UserRatedAnime).filter(UserRatedAnime.user_id == current_user.id).all()
     return result
 
-@rated_anime.post('/')
-async def user_rated_anime(rated_data : UserRatedAnimeAddSchema , current_user : UserSchema = Depends(get_current_user)):
+@rated_anime.post('/{id}')
+async def user_rated_anime(id : int, rated_data : UserRatedAnimeAddSchema , current_user : UserSchema = Depends(get_current_user)):
     with SessionLocal() as db:
-        anime = db.query(Anime).filter(Anime.id == rated_data.anime_id).first()
+        anime = db.query(Anime).filter(Anime.id == id).first()
         if anime is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Anime not exists!")
         
-        anime_rated = get_anime_user_rated(anime_id=rated_data.anime_id, user_id=current_user.id)
+        anime_rated = get_anime_user_rated(anime_id=id, user_id=current_user.id)
         if not anime_rated is None:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Anime rated!")
         
@@ -41,13 +41,13 @@ async def user_rated_anime(rated_data : UserRatedAnimeAddSchema , current_user :
         
         result = db.query(FavoriteListAnime).filter(
             FavoriteListAnime.favorite_list.has(user=current_user),
-            FavoriteListAnime.anime_id == rated_data.anime_id
+            FavoriteListAnime.anime_id == id
         ).first()
         
         if result is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Anime not exists in to lists!")
         
-        db_rated = UserRatedAnime(rating=rated_data.rating, anime_id=rated_data.anime_id, user_id=current_user.id)
+        db_rated = UserRatedAnime(rating=rated_data.rating, anime_id=id, user_id=current_user.id)
         db.add(db_rated)
         db.commit()
         db.refresh(db_rated)

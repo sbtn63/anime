@@ -44,7 +44,6 @@ class UserRatedAnimeSchema(BaseModel):
     updated_at: Optional[datetime] = None
 
 class UserRatedAnimeAddSchema(BaseModel):
-    anime_id : int
     rating : int
 
 class UserRatedAnimeUpdateSchema(BaseModel):

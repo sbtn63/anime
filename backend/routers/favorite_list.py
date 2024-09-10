@@ -105,10 +105,10 @@ async def favorite_list_animes_list(id : int, current_user : UserSchema = Depend
     
     return result
           
-@favorite_list.post('/anime', status_code=status.HTTP_200_OK)
-async def add_anime_favorite_list(add_anime_favorite_data : FavoriteListAnimeAddSchema, current_user : UserSchema = Depends(get_current_user)):  
+@favorite_list.post('/{id}/anime', status_code=status.HTTP_200_OK)
+async def add_anime_favorite_list( id : int, add_anime_favorite_data : FavoriteListAnimeAddSchema, current_user : UserSchema = Depends(get_current_user)):  
     try:
-        favorite_list_id = add_anime_favorite_data.favorite_list_id
+        favorite_list_id = id
         result = get_favorite_list(favorite_list_id=favorite_list_id, user_id=current_user.id)
         
         if result is None:
@@ -164,7 +164,8 @@ async def add_anime_favorite_list(add_anime_favorite_data : FavoriteListAnimeAdd
                     db.add(db_gender)
         
             db_favorite_list_animes = FavoriteListAnime(
-                anime_id=add_anime_favorite_data.anime_id, favorite_list_id=add_anime_favorite_data.favorite_list_id
+                anime_id=add_anime_favorite_data.anime_id, 
+                favorite_list_id=favorite_list_id
             )
             db.add(db_favorite_list_animes)
             

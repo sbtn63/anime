@@ -28,5 +28,4 @@ class FavoriteListAnimeSchema(BaseModel):
     updated_at : Optional[datetime] = None
     
 class FavoriteListAnimeAddSchema(BaseModel):
-    favorite_list_id : int
     anime_id : int
